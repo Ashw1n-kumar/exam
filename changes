@@ -1,0 +1,22 @@
+DATABASE---
+discount save agala..
+last ha irukura autofield save agala.customer name customer id save agala..
+customer id num etc..save agala
+time mu thapa katura mari iruuku
+customer datas are not fetched properly
+it only store whiele using the customer data//at the time also the customer name not go to db
+time is wrong inside the database//time la date la iruk so date theva illa
+qr string is not generated
+value 0 va irukurapa bill print aga kudathu!!!
+vat number kudukurapa 3 la irunthu start paannum then 15 irukuraknum apo tha next things la open agum--in customer id create pandrayadathulaa
+then customeer mail la @ illaanalu save panna mudiuthu
+redium button and edit button is missing for the customers
+payment page la customer oda deatials or name achum katanum
+in final recipt-the canceled item should not be print
+
+
+
+ui la customer id irukura yadathula proper ha work nadakalaa
+search proper ha work agala
+db ku poi fetch pannaalaa
+bill panitu cancel pana 0 agi cancel agiranum//but inga 0 va um bill panitu irukom
