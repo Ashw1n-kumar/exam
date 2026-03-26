@@ -1,0 +1,1100 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview logic Study Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #6366f1;
+            --secondary: #a855f7;
+            --bg: #030712;
+            --card: #111827;
+            --text: #f3f4f6;
+            --muted: #9ca3af;
+            --grad: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+            padding-bottom: 50px;
+        }
+
+        .nav {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(3, 7, 18, 0.85); backdrop-filter: blur(10px);
+            padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .brand { font-weight: 800; font-size: 1.5rem; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+
+        .hero { padding: 80px 5%; text-align: center; }
+        .hero h1 { font-size: 4rem; font-weight: 800; margin-bottom: 1rem; }
+        .hero p { font-size: 1.25rem; color: var(--muted); margin-bottom: 2rem; }
+
+        .filter-container {
+            display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 40px;
+        }
+        .filter-btn {
+            padding: 10px 20px; border-radius: 30px; background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text); cursor: pointer;
+            font-weight: 600; transition: all 0.3s;
+        }
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--primary); border-color: var(--primary); transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 0 5%; }
+
+        .category-header { 
+            font-size: 2rem; font-weight: 700; margin: 3rem 0 1.5rem;
+            padding-left: 1rem; border-left: 5px solid var(--primary); color: white;
+        }
+
+        .problem-accordion { margin-bottom: 0.75rem; }
+        .problem-btn {
+            width: 100%; border: 1px solid rgba(255,255,255,0.05);
+            background: var(--card); color: var(--text);
+            padding: 1.25rem 1.5rem; text-align: left;
+            font-size: 1.1rem; font-weight: 500; cursor: pointer;
+            border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s;
+        }
+        .problem-btn:hover { border-color: var(--primary); background: rgba(255,255,255,0.02); }
+        .problem-btn.active { 
+            border-bottom-left-radius: 0; border-bottom-right-radius: 0;
+            border-color: var(--primary); background: rgba(99, 102, 241, 0.05);
+        }
+        .chevron { transition: transform 0.3s; }
+        .problem-btn.active .chevron { transform: rotate(180deg); }
+
+        .code-panel {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.4s ease;
+            background: #0d1117; border: 1px solid var(--primary);
+            border-top: none; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
+        }
+        .code-panel.show { max-height: 2000px; }
+
+        pre[class*="language-"] {
+            margin: 0 !important; padding: 1.5rem !important;
+            background: transparent !important; font-size: 0.95rem !important;
+        }
+
+        .footer { text-align: center; padding: 60px; color: var(--muted); opacity: 0.6; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="brand">INTERVIEW PRO</div>
+        <div style="font-weight: 600; color: #10b981;">Manual Logic Series</div>
+    </nav>
+
+    <header class="hero">
+        <h1>Coding <span style="background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Mastery</span> Guide</h1>
+        <p>100+ Interview problems solved with pure logic (No min/max/sort built-ins).</p>
+
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">All Topics</button>
+            <button class="filter-btn" data-filter="Arrays">Arrays</button> <button class="filter-btn" data-filter="Numbers">Numbers</button> <button class="filter-btn" data-filter="Number System">Number System</button> <button class="filter-btn" data-filter="Sorting">Sorting</button> <button class="filter-btn" data-filter="String">String</button>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="category-block" data-category="Arrays"><div class="category-header">Arrays</div>
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Find the smallest number</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [10, 5, 20, 8]
+smallest = arr[0]
+for i in range(1, len(arr)):
+    if arr[i] < smallest:
+        smallest = arr[i]
+print(smallest)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Find the largest number</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [10, 5, 20, 8]
+largest = arr[0]
+for i in range(1, len(arr)):
+    if arr[i] > largest:
+        largest = arr[i]
+print(largest)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Second Smallest and Second Largest</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 4, 7, 7, 5]
+smallest = s_smallest = float('inf')
+largest = s_largest = float('-inf')
+for x in arr:
+    if x < smallest:
+        s_smallest = smallest; smallest = x
+    elif x < s_smallest and x != smallest:
+        s_smallest = x
+    if x > largest:
+        s_largest = largest; largest = x
+    elif x > s_largest and x != largest:
+        s_largest = x
+print(f"S2: {s_smallest}, L2: {s_largest}")</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Reverse a given array</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 3, 4, 5]
+n = len(arr)
+for i in range(n // 2):
+    arr[i], arr[n - 1 - i] = arr[n - 1 - i], arr[i]
+print(arr)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Count frequency of each element</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 2, 3, 3, 3]
+freq = {}
+for x in arr:
+    if x in freq: freq[x] += 1
+    else: freq[x] = 1
+print(freq)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Rearrange array in increasing-decreasing order</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 3, 4, 5, 6]
+n = len(arr)
+for i in range(n): 
+    for j in range(0, n-i-1): 
+        if arr[j] > arr[j+1]: arr[j], arr[j+1] = arr[j+1], arr[j]
+res = []
+mid = (n + 1) // 2
+for i in range(mid): res.append(arr[i])
+for i in range(n - 1, mid - 1, -1): res.append(arr[i])
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Calculate sum of elements</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 3, 4, 5]
+total = 0
+for x in arr: total += x
+print(total)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Rotate array by K elements</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 3, 4, 5]; k = 2; n = len(arr); k %= n
+res = [0]*n
+for i in range(n): res[(i + (n-k)) % n] = arr[i]
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Average of all elements</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 3]
+total = 0
+for x in arr: total += x
+print(total / len(arr))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Median of array</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 3, 4, 2, 5]
+n = len(arr)
+for i in range(n): 
+    for j in range(0, n-i-1): 
+        if arr[j] > arr[j+1]: arr[j], arr[j+1] = arr[j+1], arr[j]
+if n % 2 == 0: m = (arr[n//2-1] + arr[n//2]) / 2
+else: m = arr[n//2]
+print(m)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Remove duplicates (Sorted)</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 1, 2, 2, 3]
+res = []
+if arr:
+    res.append(arr[0])
+    for i in range(1, len(arr)):
+        if arr[i] != arr[i-1]: res.append(arr[i])
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Remove duplicates (Unsorted)</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [4, 1, 2, 1, 4]
+res = []
+for x in arr:
+    if x not in res: res.append(x)
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Adding Element</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 3]; el = 99; pos = 1
+res = [0]*(len(arr)+1)
+for i in range(pos): res[i] = arr[i]
+res[pos] = el
+for i in range(pos, len(arr)): res[i+1] = arr[i]
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Repeating elements</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 1, 3, 2]; f = {}; res = []
+for x in arr: f[x] = f.get(x,0)+1
+for x, c in f.items():
+    if c > 1: res.append(x)
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Non-repeating elements</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 1, 3, 2]; f = {}; res = []
+for x in arr: f[x] = f.get(x,0)+1
+for x, c in f.items():
+    if c == 1: res.append(x)
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Symmetric pairs</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [[1, 2], [2, 1], [3, 4]]
+res = []
+for i in range(len(arr)):
+    for j in range(i+1, len(arr)):
+        if arr[i][0] == arr[j][1] and arr[i][1] == arr[j][0]: res.append(arr[i])
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Max product subarray</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [2, 3, -2, 4]; res = arr[0]
+for i in range(len(arr)):
+    m = arr[i]
+    for j in range(i+1, len(arr)):
+        res = max(res, m); m *= arr[j]
+    res = max(res, m)
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Rank of elements</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [20, 15, 26, 2, 98, 6]
+t = list(arr)
+for i in range(len(t)): 
+    for j in range(len(t)-i-1): 
+        if t[j] > t[j+1]: t[j], t[j+1] = t[j+1], t[j]
+rank = {}; r = 1
+for x in t: 
+    if x not in rank: rank[x] = r; r += 1
+res = [rank[x] for x in arr]
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Sort by frequency</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 2, 3, 3, 3]
+f = {}
+for x in arr: f[x] = f.get(x,0)+1
+unique = list(f.keys())
+for i in range(len(unique)): 
+    for j in range(len(unique)-i-1): 
+        if f[unique[j]] < f[unique[j+1]]: unique[j], unique[j+1] = unique[j+1], unique[j]
+res = []
+for x in unique: 
+    for _ in range(f[x]): res.append(x)
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Equilibrium index</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [2, 3, -1, 8, 4]
+for i in range(len(arr)):
+    s1 = s2 = 0
+    for j in range(i): s1 += arr[j]
+    for j in range(i+1, len(arr)): s2 += arr[j]
+    if s1 == s2: print(i); break</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Circular rotation</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [1, 2, 3, 4, 5]; k = 1; n = len(arr)
+res = [0]*n
+for i in range(n): res[(i+k)%n] = arr[i]
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Sort by another array</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a1 = [2, 1, 2, 5, 7, 1]; a2 = [2, 1]
+res = []
+for x in a2: 
+    for y in a1: 
+        if x == y: res.append(y)
+rem = []
+for x in a1: 
+    if x not in a2: rem.append(x)
+for i in range(len(rem)): 
+    for j in range(len(rem)-i-1): 
+        if rem[j] > rem[j+1]: rem[j], rem[j+1] = rem[j+1], rem[j]
+print(res + rem)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Search element</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">arr = [10, 20, 30]; t = 20; r = -1
+for i in range(len(arr)): 
+    if arr[i] == t: r = i; break
+print(r)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Is Subset</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a1 = [1, 2, 3, 4, 5]; a2 = [2, 3]; r = True
+for x in a2: 
+    if x not in a1: r = False; break
+print(r)</code></pre>
+                    </div>
+                </div>
+                </div><div class="category-block" data-category="Numbers"><div class="category-header">Numbers</div>
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Palindrome</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 121; t = n; r = 0
+while t > 0: r = r*10 + t%10; t//=10
+print(n == r)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Find Palindromes in range</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, b = 10, 50; res = []
+for i in range(a, b+1): 
+    t = i; r = 0
+    while t > 0: r = r*10 + t%10; t//=10
+    if r == i: res.append(i)
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Prime check</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 11; is_p = True
+if n < 2: is_p = False
+for i in range(2, int(n**0.5)+1): 
+    if n%i==0: is_p=False; break
+print(is_p)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Primes in range</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, b = 2, 10; res = []
+for i in range(a, b+1): 
+    if i < 2: continue
+    is_p = True
+    for j in range(2, int(i**0.5)+1): 
+        if i%j==0: is_p=False; break
+    if is_p: res.append(i)
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Armstrong number</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 153; t = n; s = 0; p = len(str(n))
+while t > 0: s += (t%10)**p; t//=10
+print(s == n)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Perfect number</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 28; s = 0
+for i in range(1, n): 
+    if n%i==0: s += i
+print(s == n)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Even or Odd</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 7; print('Even' if n%2==0 else 'Odd')</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Pos or Neg</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = -5
+if n>0: print('Pos')
+elif n<0: print('Neg')
+else: print('Zero')</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Sum of N natural</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 10; s = 0
+for i in range(1, n+1): s += i
+print(s)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Sum of AP</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, d, n = 2, 3, 5; s = 0
+for i in range(n): s += a; a += d
+print(s)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Sum of GP</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, r, n = 2, 2, 5; s = 0
+for i in range(n): s += a; a *= r
+print(s)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Greatest of two</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, b = 10, 20; print(a if a > b else b)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Greatest of three</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, b, c = 10, 30, 20
+mx = a
+if b > mx: mx = b
+if c > mx: mx = c
+print(mx)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Leap Year</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">y = 2024
+print((y%4==0 and y%100!=0) or (y%400==0))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Reverse digits</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 123; r = 0
+while n > 0: r = r*10 + n%10; n //=10
+print(r)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Max/Min digit</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 9182; mx = 0; mn = 9
+while n > 0: 
+    d = n%10; n//=10
+    if d > mx: mx = d
+    if d < mn: mn = d
+print(mx, mn)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Fibonacci</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 10; a, b = 0, 1
+for _ in range(n): print(a, end=' '); a, b = b, a+b</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Factorial</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 5; f = 1
+for i in range(1, n+1): f *= i
+print(f)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Power</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">b, e = 2, 5; r = 1
+for _ in range(e): r *= b
+print(r)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Factors</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 12; res = [i for i in range(1, n+1) if n%i==0]; print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Prime factors</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 60; i = 2; r = []
+while i*i <= n:
+    if n%i: i += 1
+    else: n //= i; r.append(i)
+if n>1: r.append(n)
+print(r)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Strong number</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 145; t = n; s = 0
+while t > 0:
+    d = t%10; f = 1
+    for i in range(1, d+1): f*=i
+    s+=f; t//=10
+print(s == n)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>GCD</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, b = 12, 18
+while b: a, b = b, a%b
+print(a)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>LCM</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, b = 12, 18; x, y = a, b
+while y: x, y = y, x%y
+print(abs(a*b)//x)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Harshad</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 18; s = sum(int(d) for d in str(n)); print(n%s==0)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Abundant</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">n = 12; s = sum(i for i in range(1, n) if n%i==0); print(s>n)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Digits to Words</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">w = ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
+n = 123; res = ' '.join(w[int(d)] for d in str(n)); print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Roots of Quadratic</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a, b, c = 1, -5, 6; d = b*b - 4*a*c
+r1 = (-b + d**0.5)/(2*a); r2 = (-b - d**0.5)/(2*a); print(r1, r2)</code></pre>
+                    </div>
+                </div>
+                </div><div class="category-block" data-category="Number System"><div class="category-header">Number System</div>
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Binary to Decimal</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">b = '1010'; d = 0; p = 0
+for i in range(len(b)-1, -1, -1):
+    if b[i]=='1': d += 2**p
+    p += 1
+print(d)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Binary to Octal</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">b = '1010'; d = int(b, 2); o = oct(d)[2:]; print(o)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Decimal to Binary</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">d = 10; b = bin(d)[2:]; print(b)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Decimal to Octal</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">d = 10; o = oct(d)[2:]; print(o)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Octal to Binary</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">o = '12'; b = bin(int(o, 8))[2:]; print(b)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Octal to Decimal</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">o = '12'; d = int(o, 8); print(d)</code></pre>
+                    </div>
+                </div>
+                </div><div class="category-block" data-category="Sorting"><div class="category-header">Sorting</div>
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Bubble Sort</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a = [64, 34, 25, 12]; n = len(a)
+for i in range(n):
+    for j in range(0, n-i-1):
+        if a[j] > a[j+1]: a[j], a[j+1] = a[j+1], a[j]
+print(a)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Selection Sort</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a = [64, 25, 12, 22]; n = len(a)
+for i in range(n):
+    m = i
+    for j in range(i+1, n):
+        if a[m] > a[j]: m = j
+    a[i], a[m] = a[m], a[i]
+print(a)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Insertion Sort</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">a = [12, 11, 13, 5]
+for i in range(1, len(a)):
+    k = a[i]; j = i-1
+    while j >= 0 and k < a[j]: a[j+1] = a[j]; j -= 1
+    a[j+1] = k
+print(a)</code></pre>
+                    </div>
+                </div>
+                </div><div class="category-block" data-category="String"><div class="category-header">String</div>
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Palindrome String</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'radar'; print(s == s[::-1])</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Count V, C, S</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'hi 123'; v=c=sp=0
+for x in s:
+    if x == ' ': sp += 1
+    elif x.lower() in 'aeiou': v += 1
+    elif x.isalpha(): c += 1
+print(v, c, sp)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Remove Vowels</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'hello'; print(''.join(i for i in s if i not in 'aeiou'))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Remove Spaces</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'a b c'; print(s.replace(' ', ''))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Reverse String</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'hello'; print(s[::-1])</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Sum of digits in string</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'ab12'; print(sum(int(i) for i in s if i.isdigit()))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Anagram</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s1, s2 = 'listen', 'silent'; print(sorted(s1) == sorted(s2))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Max occurring char</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'apple'; f = {}; mx = 0; res = ''
+for c in s: f[c] = f.get(c,0)+1
+for c in f:
+    if f[c] > mx: mx = f[c]; res = c
+print(res)</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Remove Dups</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'apple'; print(''.join(dict.fromkeys(s)))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Sort Chars</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'apple'; print(''.join(sorted(s)))</code></pre>
+                    </div>
+                </div>
+                
+                <div class="problem-accordion">
+                    <button class="problem-btn">
+                        <span>Reverse words</span>
+                        <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </button>
+                    <div class="code-panel">
+                        <pre><code class="language-python">s = 'hello world'; print(' '.join(s.split()[::-1]))</code></pre>
+                    </div>
+                </div>
+                </div>
+    </main>
+
+    <footer class="footer">
+        <p>&bull; Premium Preparation Kit &bull;</p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script>
+        // Accordion
+        document.querySelectorAll('.problem-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                btn.classList.toggle('active');
+                const panel = btn.nextElementSibling;
+                panel.classList.toggle('show');
+            });
+        });
+
+        // Filter
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const blocks = document.querySelectorAll('.category-block');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const filter = btn.getAttribute('data-filter');
+                blocks.forEach(block => {
+                    if (filter === 'all' || block.getAttribute('data-category') === filter) {
+                        block.style.display = 'block';
+                    } else {
+                        block.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
